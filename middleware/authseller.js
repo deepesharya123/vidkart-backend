@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const auth =async (req,res,next)=>{
     try{
         const token = req.cookies['auth_token'];
-        const decoded = jwt.verify(token,"THEsecretKEY!@#")
+        const decoded = jwt.verify(token,process.env.JWT_ACC_KEY)
         // console.log(decoded)
         // console.log(typeof(decoded._id))
 
