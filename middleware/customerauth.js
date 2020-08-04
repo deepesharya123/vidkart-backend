@@ -5,7 +5,7 @@ const customerAuth = async function(req,res,next){
     try{
         
         const token = req.cookies['auth_token'];
-        const decoded = jwt.verify(token,"THEsecretKEY!@#")
+        const decoded = jwt.verify(token,process.env.JWT_ACC_KEY)
         const customer = await Customer.findOne({_id:decoded._id,'tokens.token':token})
         
         if(!customer){
