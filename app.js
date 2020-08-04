@@ -2,11 +2,11 @@ const express = require('express');
 const app = express();
 const ejs = require('ejs');
 const path = require('path');
-const port = process.env.PORT ||3000 ;
 const cookieParser =require('cookie-parser')
 
 require('dotenv').config('./dev.env');
 
+const port = process.env.PORT;
 
 const viewsPath = path.join(__dirname,'./views');
 const publicDir = path.join(__dirname,'./public');
