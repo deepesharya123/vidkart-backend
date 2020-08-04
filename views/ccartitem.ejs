@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        * {
+          box-sizing:border-box;
+        }
+        
+        body {
+          margin: 0;
+          font-family: Arial, Helvetica, sans-serif;
+  
+        }
+        
+        .container {
+          padding: 64px;
+          
+          
+        }
+        
+        .row:after {
+          content: "";
+          display: table;
+          clear: both;
+          
+        }
+        
+        .column-66 {
+          float: left;
+          width: 66.66666%;
+          padding: 20px;
+        
+        }
+        
+        .column-33 {
+          float: left;
+          width: 33.33333%;
+          padding: 20px;
+        }
+        
+        .large-font {
+          font-size: 48px;
+        }
+        
+        .xlarge-font {
+          font-size: 64px
+        }
+        
+  #myVideo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%; 
+    min-height: 100%;
+    z-index: -2;
+  }
+        .button {
+          border: none;
+          color: white;
+          padding: 14px 28px;
+          font-size: 16px;
+          cursor: pointer;
+          background-color: #4CAF50;
+        }
+        
+        img {
+          display: block;
+          height: auto;
+          max-width: 100%;
+        }
+        
+        @media screen and (max-width: 1000px) {
+          .column-66,
+          .column-33 {
+            width: 100%;
+            text-align: center;
+          }
+          img {
+            margin: auto;
+          }
+        }
+  
+        </style></head>
+  <body>
+
+    <video autoplay muted  id="myVideo">
+        <source src="/headerphoto/Sell.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+      </video>
+          <center>
+            <h1>Welcome <%=name%></h1></center>
+      
+          <% let len = itemLength%>
+          <center>
+            <h1><%=len%> items are here.</h1></center>
+            <% if(len===0){ %> 
+             <center><h1>No items to show.</h1></center>
+            <% } %> 
+          <% for(i=0;i<len;i++){ %>
+      
+           
+            <div class="container">
+              <div class="row" >
+                <div class="column-66">
+                  <h1 class="xlarge-font"><b><%= items[i].title  %> </b></h1>
+                  <h1 class="large-font" style="color:MediumSeaGreen;"><b> <h3>Price: <%= items[i].price %></h3></b> </h1>
+                  <p style="font-size:36px; "><span ></span> <%= items[i].description %> </p>
+                    
+                  <h4>Contact number: <%= items[i].phoneNumber %> </h4>
+                </div>
+                <div class="column-33">
+                  <% path = '/upload/'+items[i].imagePath %>
+                    <img src="<%=path%>" width="335" height="471">
+                </div>
+              </div>
+              <% let idt = items[i].id %> 
+              <form action="/customer/deletethisItem/<%=idt%>" method="POST">
+                <button class="btn btn-success">Delete the item from your cart</button></p>
+                  <small></small>
+              </form>
+            </div>
+      
+      
+          
+        </div>
+      
+      
+          
+       
+          
+          <%}%>
+      
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>
