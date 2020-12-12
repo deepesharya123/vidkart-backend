@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const ejs = require('ejs');
 const path = require('path');
-const cookieParser =require('cookie-parser')
+const cookieParser =require('cookie-parser');
 
 require('dotenv').config('./dev.env');
 
@@ -27,6 +27,6 @@ app.get('/',async(req,res)=>{
 
 app.use('/users/',require('./routes/users'));
 
-app.use('/customer/',require('./routes/customer'))
+app.use('/customer/',require('./routes/customer'));
 
-app.listen(port,()=> console.log("CONNECTED TO THE SERVER ON "+port))
+app.listen(port,()=> console.log("CONNECTED TO THE SERVER ON "+port));
