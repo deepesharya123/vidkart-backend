@@ -29,7 +29,4 @@ app.use('/users/',require('./routes/users'));
 
 app.use('/customer/',require('./routes/customer'))
 
-
-
-
 app.listen(port,()=> console.log("CONNECTED TO THE SERVER ON "+port))
