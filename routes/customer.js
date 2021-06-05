@@ -362,8 +362,8 @@ router.get('/forgotpassword',async(req,res)=>{
 })
 
 router.post('/getLink',async(req,res)=>{
-    // res.send(req.body.customeremail)
-    // console.log(req.body)
+    res.send(req.body.customeremail)
+    console.log(req.body)
     
 })
 
