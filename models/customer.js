@@ -27,6 +27,10 @@ const customerSchema = new mongoose.Schema({
     confirm:{
         defaultValue:false
     },
+    forgetPassword:{
+        type:String,
+        default:""
+    },
     tokens:[{
         token:{
             type:String,
@@ -48,13 +52,20 @@ customerSchema.methods.generateAuthtoken = async function(){
 }
 
 
+customerSchema.methods.tokenForResetPassword = async function(customer){
+    
+    const token = await jwt.sign({_id:customer._id.toString()},process.env.FORGOT_PASS)
+    customer.forgetPassword = token;
+    return token; 
+
+}
+
 customerSchema.statics.findByCredentials = async(customeremail,customerpassword)=>{
 
     const customer = await Customer.findOne({customeremail}) 
     console.log("GOOD1")
     
     if(!customer){
-    console.log("GOOD")
         return customer;
     }
     const isMatch = await bcrypt.compare(customerpassword,customer.customerpassword)

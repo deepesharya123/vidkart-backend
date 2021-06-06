@@ -15,7 +15,7 @@ const sendEmail = (email,name,url)=>{
         Hello ${name},
         For you better experience we are requesting you to please 
         verify your account by inserting the following link on verifiaction page.       
-        <a>${url}</a>
+        <a><br>"${url}"</a>
         `
     },(err,res)=>{
         if(err){
@@ -28,4 +28,35 @@ const sendEmail = (email,name,url)=>{
 }
 
 
-module.exports = sendEmail;
+const resetPassEmail = (email,url)=>{
+    sgMail.send({
+        to:email,
+        from:'vidkart4u@gmail.com',
+        subject:'Reset Password',
+        text:"Sure ?  Wanna change your password",
+        
+        html:`
+        Hello ${email},
+        For you better experience we are requesting you to please 
+        verify your account by inserting the following link on verifiaction page.       
+        <a><br> 
+        
+        <form method="POST" action="localhost:8000/customer/resetPasswordPage/:${url}">
+            <a href="localhost:8000/customer/resetPasswordPage/:${url}" target="_blank">Transporting to another image</a>
+        </form>
+        
+        `
+    },(err,res)=>{
+        if(err){
+            console.log(err)
+        }
+        else{
+            console.log("MAIL HAS BEEN SENT SUCCESSFULLY")
+        }
+    })
+}
+
+module.exports = {
+    sendEmail,
+    resetPassEmail
+};

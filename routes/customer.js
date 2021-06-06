@@ -7,7 +7,7 @@ const Cart = require('../models/cartowner');
 const jwt = require('jsonwebtoken');
 // const nodemailer = require('nodemailer')
 const mailGun = require('nodemailer-mailgun-transport')
-const sendEmail = require('../email/email');
+const {sendEmail,resetPassEmail} = require('../email/email');
 
 // const mailgun = require("mailgun-js");
 
@@ -15,12 +15,7 @@ const sendEmail = require('../email/email');
 
 const nodemailer = require('nodemailer')
 router.get('/register',async(req,res)=>{
-    try{
-        res.render('cregister')
-    }catch(e){
-
-    }
-
+    res.render('cregister')
 })
 
 router.get('/login',async(req,res)=>{
@@ -29,18 +24,19 @@ router.get('/login',async(req,res)=>{
 
 router.post('/product',async(req,res)=>{
 
-try{
-    const search = req.body.search
-    const items = await Item.find({title:search})
-        res.render('index',{
-                itemlen:items,
-        })
-} 
-catch(e){
-console.log(e)
-}
+    try{
+        const search = req.body.search
+        const items = await Item.find({title:search})
+            res.render('index',{
+                    itemlen:items,
+            })
+    } 
+    catch(e){
+        console.log(e)
+    }
 
 })
+
 router.get('/checked',async(req,res)=>{
     try{
         res.send("GOOD");
@@ -50,12 +46,12 @@ router.get('/checked',async(req,res)=>{
         console.log(e)
     }
 })
+
 router.get('/loginafter',async(req,res)=>{
     
 })
 router.post('/register',async(req,res)=>{
     try{
-        
         const customer = new Customer(req.body);
         customer.customerisVerified = false
         const customername= customer.customername;
@@ -64,9 +60,9 @@ router.post('/register',async(req,res)=>{
         const property = "Customer"
         const token = jwt.sign({customername,property,customeremail,customerpassword},process.env.JWT_ACC_KEY)
         customer.customerTokenActivation = token;
-        console.log(customer)
+        // console.log(customer)
         await customer.save()
-        console.log(token)
+        // console.log(token)
 
         const url = token
 
@@ -92,23 +88,24 @@ router.post('/cverify',async(req,res)=>{
     //     cverifyToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcm5hbWUiOiJEZWVwZXNoIEFyeWEiLCJjdXN0b21lcmVtYWlsIjoiZGVlcGVzaGFyeWE4MjI0NkBnbWFpbC5jb20iLCJjdXN0b21lcnBhc3N3b3JkIjoiZGVlcGVzaGFyeWE4MjI0NkBnbWFpbC5jb20iLCJpYXQiOjE1OTYzNTY5MjMsImV4cCI6MTU5NjM1ODEyM30.pueUdloNaXgyNGkClLvAowYrhntFlBWNGAZqfYSStM0'
     //   }
     try{
-        
-    const ctoken = req.body.cverifyToken;
+            
+        const ctoken = req.body.cverifyToken;
 
-    const customer = await Customer.findOne({customerTokenActivation:ctoken})
+        const customer = await Customer.findOne({customerTokenActivation:ctoken})
 
-    if(!customer){
-        res.send("You are not Authorized to perform this action")
-    }
+        if(!customer){
+            res.send("You are not Authorized to perform this action")
+        }
 
-   else{ customer.customerisVerified= true;
-    customer.save()
-    console.log(customer)
-    res.render('clogin')
-   }
+        else{ 
+            customer.customerisVerified= true;
+            customer.save()
+            console.log(customer)
+            res.render('clogin')
+        }
 
     }catch(e){
-    console.log(e)    
+         console.log(e)    
     }
 
 
@@ -119,13 +116,10 @@ router.post('/cverify',async(req,res)=>{
 
 router.post('/login',async(req,res)=>{
     try{
-
-        // { customeremail: 'deep@gmail.com', customerpassword: 'deep@gmail.com' }
-       
         const {customeremail,customerpassword} = req.body;
         const customer  = await Customer.findByCredentials(customeremail,customerpassword);
         if(!customer){
-            res.send("Please check your credentials")
+            res.send("You are not registered, Please make sure that you are registered.")
         } 
 
         const token = await customer.generateAuthtoken();
@@ -139,14 +133,14 @@ router.post('/login',async(req,res)=>{
 
         if(customer.customerisVerified===true){
 
-        res.render('cdashboard',{
-            name,
-            itemlen
-        })
-    }
-    else{
-    res.send("<center><h1>Please verify your email before login</h1></center>")
-    }
+            res.render('cdashboard',{
+                name,
+                itemlen
+            })
+        }   
+        else{
+             res.send("<center><h1>Please verify your email before login</h1></center>")
+        }
 
     }catch(e){
 
@@ -158,7 +152,6 @@ router.post('/logout',customerAuth,async(req,res)=>{
         
     const token = req.token;
     // console.log(token);
-    // console.log(req.customer.customeremail);
 
     req.customer.tokens = req.customer.tokens.filter((token)=> token.token != req.token )
 
@@ -214,7 +207,7 @@ router.post('/loggedin/addtocart/:id',customerAuth,async(req,res)=>{
     try{
         const reqItemId = req.params.id;
         console.log(reqItemId);
-        console.log("lin 151")
+        
         const item = await Item.findById(reqItemId);
         console.log(item)
         // {
@@ -361,12 +354,33 @@ router.get('/forgotpassword',async(req,res)=>{
     res.render('cchangepass')
 })
 
-router.post('/getLink',async(req,res)=>{
-    res.send(req.body.customeremail)
-    console.log(req.body)
-    
+router.post('/resetPassword',async(req,res)=>{
+    try{
+        const email  = req.body.customeremail;
+        const url = "Checking this under the url"
+        const customer = await Customer.findOne({customeremail:email})
+        if(!customer)
+            res.send("No customer exist");
+        // console.log(customer)
+
+        const token = await customer.tokenForResetPassword(customer)
+        console.log(token)
+
+        resetPassEmail(email,token)
+        
+    }
+    catch(e){
+        console.log(e)
+    }
 })
 
+router.post('/resetPasswordPage/:tok',async(req,res)=>{
+    try{
+        console.log("Welcome to resetPasswordPage")
+    }catch(e){
+        console.log(e)
+    }
+})
 
 
 module.exports = router
