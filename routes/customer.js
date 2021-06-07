@@ -367,16 +367,32 @@ router.post('/resetPassword',async(req,res)=>{
         console.log(token)
 
         resetPassEmail(email,token)
-        
+        res.render('codeinputforPassChange');
     }
     catch(e){
         console.log(e)
     }
 })
 
-router.post('/resetPasswordPage/:tok',async(req,res)=>{
+{/* <form action="/customer/resetPassword" method="POST">
+    E-mail:
+        <input type="email" name="customeremail">
+         <button class="btn btn-info">Send link</button>
+      </form> */}
+
+router.post('/resetPasswordPage/',async(req,res)=>{
     try{
-        console.log("Welcome to resetPasswordPage")
+        const tok = req.body.tok;
+        const customer = await Customer.findOne({forgetPassword:tok});
+        console.log("Code has been entered")
+        console.log(customer)
+
+        if(!customer)
+            return "Please enter the correct code";
+        
+        res.send("YOu have change the password")
+        
+
     }catch(e){
         console.log(e)
     }

@@ -37,13 +37,11 @@ const resetPassEmail = (email,url)=>{
         
         html:`
         Hello ${email},
-        For you better experience we are requesting you to please 
-        verify your account by inserting the following link on verifiaction page.       
+        You have requested for PASSWORD CHANGE so to change 
+        your password please enter the following line to the form.
         <a><br> 
-        
-        <form method="POST" action="localhost:8000/customer/resetPasswordPage/:${url}">
-            <a href="localhost:8000/customer/resetPasswordPage/:${url}" target="_blank">Transporting to another image</a>
-        </form>
+        ${url}
+
         
         `
     },(err,res)=>{
