@@ -385,7 +385,7 @@ router.post('/resetPasswordPage/',async(req,res)=>{
         const tok = req.body.tok;
         const customer = await Customer.findOne({forgetPassword:tok});
         console.log("Code has been entered")
-        console.log(customer)
+        // console.log(customer)
 
         if(!customer)
             return "Please enter the correct code";

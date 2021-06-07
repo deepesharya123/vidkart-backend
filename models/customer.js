@@ -54,18 +54,30 @@ customerSchema.methods.generateAuthtoken = async function(){
 
 customerSchema.methods.tokenForResetPassword = async function(customer){
     
-    var signThis= customer._id.toString();
-    if(customer.forgetPassword){
-        var ren = Math.random();
-        console.log(signThis)
-        signThis = signThis.substring(0,signThis.length-ren.length);
-        ren*=10;
-        signThis+=ren;
-        console.log(ren);
-        console.log(signThis)
-    }
+    // var signThis= customer._id.toString();
+    // if(customer.forgetPassword){
+    //     var ren = Math.random();
+    //     console.log(signThis+" msignthis before change");
+    //     signThis = signThis.substring(0,signThis.length-ren.length);
+    //     ren = ren.toString();
+    //     ren = ren.substring(ren.indexOf('.'+1));
+    //     signThis+=ren;
+        
+    //     console.log(signThis+" msignthis before change");
+    //     console.log(ren+" this is the ren");
+    //     // console.log(signThis)
+    // }
+    var v1 = Math.random();
+    var v2 = Math.random();
+    console.log(v1+" v1");
+    console.log(v2+ "v2");
+    var signThis = v1+v2;
+    signThis=signThis.toString();
+    console.log(signThis)
     const token = await jwt.sign({signThis},process.env.FORGOT_PASS,{expiresIn:'30s'})
+    console.log(customer)
     customer.forgetPassword = token;
+    console.log(customer)
     await customer.save();
     return token; 
 
