@@ -57,12 +57,25 @@
      <center> <h1>Enter the code here for changing the password (For Seller)</h1></center>
         <form action="/customer/resetPasswordPage/" method="POST">
             <table>
+              <tr>    <center>
+                <label for="code">email  </label>
+              <input type="email" name="emailforchangingPass" id="emailforchangingPass">
+              </center>
+              
+            </tr>
             <tr>    <center>
             <label for="code">Enter the code here </label>
           <input type="text" name="tok" id="tok">
           </center>
           
         </tr>
+
+        <tr>    <center>
+          <label for="code">Enter new Password </label>
+        <input type="password" name="newPass" id="newPass">
+        </center>
+        
+      </tr>
        <button type="submit" class="btn btn-primary btn-block"   >Send</button>
         </table>
         </form>

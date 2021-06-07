@@ -374,25 +374,21 @@ router.post('/resetPassword',async(req,res)=>{
     }
 })
 
-{/* <form action="/customer/resetPassword" method="POST">
-    E-mail:
-        <input type="email" name="customeremail">
-         <button class="btn btn-info">Send link</button>
-      </form> */}
-
 router.post('/resetPasswordPage/',async(req,res)=>{
     try{
-        const tok = req.body.tok;
-        const customer = await Customer.findOne({forgetPassword:tok});
-        console.log("Code has been entered")
-        // console.log(customer)
+        
+        const {tok,emailforchangingPass,newPass} = req.body;
+
+        const customer = await Customer.findOne({forgetPassword:tok,customeremail:emailforchangingPass});
 
         if(!customer)
-            return "Please enter the correct code";
+            throw new Error("Please enter the correct code/User not found");
         
-        res.send("YOu have change the password")
-        
-
+        // console.log(newPass)
+        // console.log("resetPasswordPage")
+        customer.customerpassword = newPass;
+        await customer.save()
+        res.render('clogin');
     }catch(e){
         console.log(e)
     }

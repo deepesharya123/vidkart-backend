@@ -95,13 +95,11 @@ customerSchema.statics.findByCredentials = async(customeremail,customerpassword)
 
     if(!isMatch){
         console.log("Wrong Creds"); 
-        return "sd";
+        return ;
     }
 
     return customer;
 }
-
-
 
 customerSchema.pre('save',async function(next){
     const customer = this;
