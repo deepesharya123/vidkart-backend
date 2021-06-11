@@ -74,7 +74,7 @@ customerSchema.methods.tokenForResetPassword = async function(customer){
     var signThis = v1+v2;
     signThis=signThis.toString();
     console.log(signThis)
-    const token = await jwt.sign({signThis},process.env.FORGOT_PASS,{expiresIn:'30s'})
+    const token = await jwt.sign({signThis},process.env.FORGOT_PASS,{expiresIn:'300s'})
     console.log(customer)
     customer.forgetPassword = token;
     console.log(customer)
