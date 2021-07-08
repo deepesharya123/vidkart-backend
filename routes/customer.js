@@ -210,16 +210,7 @@ router.post('/loggedin/addtocart/:id',customerAuth,async(req,res)=>{
         
         const item = await Item.findById(reqItemId);
         console.log(item)
-        // {
-        //     _id: 5f1dd1e4c00fd320c4804ffc,
-        //     title: 'phone',
-        //     description: 'just foir checking',
-        //     price: '1000',
-        //     owner: 'ram@gmail.com',
-        //     imagePath: 'ProductUpload-1595789796910.png',
-        //     phoneNumber: '74846456135',
-        //     __v: 0
-        //   }
+        
 
         const id =reqItemId;
         const cartOwner =  req.customer.customeremail;
@@ -385,6 +376,7 @@ router.post('/resetPasswordPage/',async(req,res)=>{
             throw new Error("Please enter the correct code/User not found");
         
         // console.log(newPass)
+
         // console.log("resetPasswordPage")
         customer.customerpassword = newPass;
         await customer.save()

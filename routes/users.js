@@ -6,7 +6,7 @@ const authseller  = require('../middleware/authseller');
 const multer = require('multer');
 const path = require('path');
 const jwt = require('jsonwebtoken')
-const sendEmail = require('../email/email')
+const {sendEmail,resetPassEmail} = require('../email/email')
 
 
 router.get('/register',async(req,res)=>{

@@ -23,8 +23,6 @@ const sellerSchema = new mongoose.Schema({
     },
     sellerphonenumber:{
         type:String,
-        minlength:10,
-        maxlength:10,
     },
     tokens:[{
         token:{
