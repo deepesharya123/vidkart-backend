@@ -106,9 +106,8 @@ customerSchema.pre('save',async function(next){
     
     if(customer.isModified('customerpassword')){
         customer.customerpassword = await bcrypt.hash(customer.customerpassword,8)
-
     }
-next();
+    next();
 })
 
 
