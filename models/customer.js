@@ -57,6 +57,7 @@ customerSchema.statics.findByCredentials = async(customeremail,customerpassword)
     console.log("GOOD")
         return customer;
     }
+    
     const isMatch = await bcrypt.compare(customerpassword,customer.customerpassword)
 
     if(!isMatch){
