@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.static(publicDir));
 app.use(express.urlencoded({extended:true}));
 app.set('view engine','ejs');
-app.set('views',viewsPath)
+app.set('views',viewsPath);
 app.use(cookieParser())
 require('./db/mongoose');
 
