@@ -17,7 +17,8 @@ app.use(express.urlencoded({extended:true}));
 app.set('view engine','ejs');
 app.set('views',viewsPath)
 app.use(cookieParser())
-require('./db/mongoose')
+require('./db/mongoose');
+
 app.get('/',async(req,res)=>{
     const itemlen = 0;
     res.render("index",{

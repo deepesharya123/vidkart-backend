@@ -212,7 +212,7 @@ router.post('/loggedin/addtocart/:id',customerAuth,async(req,res)=>{
         console.log(item)
         
 
-        const id =reqItemId;
+        const id =reqItemId;    // THIS IS  THE ACTUALL ID OF THE ITEM
         const cartOwner =  req.customer.customeremail;
 
         const cartReady = {id,cartOwner};
