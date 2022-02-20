@@ -88,29 +88,20 @@ router.post('/cverify',async(req,res)=>{
     //     cverifyToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcm5hbWUiOiJEZWVwZXNoIEFyeWEiLCJjdXN0b21lcmVtYWlsIjoiZGVlcGVzaGFyeWE4MjI0NkBnbWFpbC5jb20iLCJjdXN0b21lcnBhc3N3b3JkIjoiZGVlcGVzaGFyeWE4MjI0NkBnbWFpbC5jb20iLCJpYXQiOjE1OTYzNTY5MjMsImV4cCI6MTU5NjM1ODEyM30.pueUdloNaXgyNGkClLvAowYrhntFlBWNGAZqfYSStM0'
     //   }
     try{
-            
         const ctoken = req.body.cverifyToken;
-
         const customer = await Customer.findOne({customerTokenActivation:ctoken})
-
         if(!customer){
             res.send("You are not Authorized to perform this action")
         }
-
-        else{ 
-            customer.customerisVerified= true;
-            customer.save()
-            console.log(customer)
-            res.render('clogin')
-        }
-
+        customer.customerisVerified= true;
+        await customer.save()
+        console.log(customer)
+        res.render('clogin')
+        
     }catch(e){
-         console.log(e)    
+        console.log(e)
+        res.send("<h1><center>Something went wrong</center></h1>")    
     }
-
-
-
-
 
 })
 

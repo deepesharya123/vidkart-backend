@@ -27,7 +27,7 @@ app.get('/',async(req,res)=>{
 })
 
 app.use('/users/',require('./routes/users'));
-
 app.use('/customer/',require('./routes/customer'));
+app.use('/admin/',require('./routes/admin'));
 
 app.listen(port,()=> console.log("CONNECTED TO THE SERVER ON "+port));
