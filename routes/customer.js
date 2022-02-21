@@ -26,7 +26,8 @@ router.post('/product',async(req,res)=>{
 
     try{
         const search = req.body.search
-        const items = await Item.find({title:search})
+        const items = await Item.find({title:search});
+        console.log("items",items);
             res.render('index',{
                     itemlen:items,
             })
@@ -188,7 +189,7 @@ router.post('/loggedin/product',customerAuth,async(req,res)=>{
             })
     } 
     catch(e){
-    console.log(e)
+        console.log(e)
     }
 
 })
@@ -249,9 +250,6 @@ router.post('/previousItem',customerAuth,async(req,res)=>{
             realitem.push(myitem);
 
         }
-        // console.log("befroe realitem")
-        // console.log(realitem)
-        // console.log("fater")
 
         if(realitem.length===0){
             res.send("<center><h1>You have not added any item yet.</h1></center>")
@@ -274,12 +272,12 @@ router.post('/previousItem',customerAuth,async(req,res)=>{
 
 
 router.post('/deletethisItem/:id',customerAuth,async(req,res)=>{
-    console.log("Cart item deletion start")
-    // console.log(req.params.id)       // this is the id of item from items model
-    const delitemid = req.params.id
-
+ 
     try{
-
+        console.log("Cart item deletion start")
+        // console.log(req.params.id)       // this is the id of item from items model
+        const delitemid = req.params.id
+    
         const itemfordeletion = await Cart.find({id:delitemid,cartOwner:req.customer.customeremail});
         console.log(itemfordeletion) 
         const idofitemfordeletion = itemfordeletion[0]._id;
@@ -297,32 +295,22 @@ router.post('/deletethisItem/:id',customerAuth,async(req,res)=>{
             const name = req.customer.customername;
             console.log("BEFORE ITEMS")
 
-        //     id: '5f1e737541874a1c84bb9974',
-        //     cartOwner: 'honey@gmail.com',
-        //     __v: 0
-        //   },
-        //   {
-        //     _id: 5f200b6c8595533c30c2fd18,
-        //     id: '5f1e6d86755bd41ac40b2e60',
-        //     cartOwner: 'honey@gmail.com',
-        //     __v: 0
-        //   }
-        const itemslen = items.length;
-        const displayItem = [];
+            const itemslen = items.length;
+            const displayItem = [];
 
-        for(i=0;i<itemslen;i++){
-            const id = items[i].id;
-            const theitem = await Item.findById(id);
-            console.log(theitem)
-            displayItem.push(theitem)
-        }
-        console.log("THE DISPLAYITM")
-        console.log(displayItem)
-            res.render('ccartitem',{
-                name,
-                itemLength:displayItem.length,
-                items:displayItem
-            })
+            for(i=0;i<itemslen;i++){
+                const id = items[i].id;
+                const theitem = await Item.findById(id);
+                console.log(theitem)
+                displayItem.push(theitem)
+            }
+            console.log("THE DISPLAYITM")
+            console.log(displayItem)
+                res.render('ccartitem',{
+                    name,
+                    itemLength:displayItem.length,
+                    items:displayItem
+                })
         }
 
 

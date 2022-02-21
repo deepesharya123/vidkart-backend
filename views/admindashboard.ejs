@@ -40,11 +40,15 @@
        <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarSupportedContent" >
          <span class="navbar-toggler-icon"></span>
         </button>
-     
        <div class="collapse navbar-collapse class" id="navbarSupportedContent" >
          <ul class="navbar-nav mr-auto">
        
            </ul>
+           
+        <form action="/admin/logout" method="POST">
+          <button class="btn btn-primary">Log out</button>
+      </form>
+
          <form method="POST" action="/admin/loggedin/product" class="form-inline my-2 my-lg-0" >
            <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="padding-left: 20px; color: white;">
            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
@@ -66,19 +70,9 @@
 
       
     <div class="container">
-        
         <h1>Welcome <%=name%></h1>
-        <form action="/admin/logout" method="POST">
-          <button class="btn btn-primary">Log out</button>
-      </form>
       <br>
-  
-      <div >
-        <form action="/admin/previousItem" method="POST">
-        <center>
-      <button class="btn btn-secondary">Your previous items</button>
-  </center>
-</form>  
+      <div >  
 </div>
       <div class="" style="float: right;">
      

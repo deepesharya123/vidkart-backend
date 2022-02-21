@@ -210,8 +210,8 @@
             <h1 class="xlarge-font"><b><%= items[i].title  %> </b></h1>
             <h1 class="large-font" style="color:MediumSeaGreen;"><b> <h3>Price: <%= items[i].price %></h3></b> </h1>
             <p style="font-size:36px; "><span ></span> <%= items[i].description %> </p>
-            <h3>Contact number of seller : <%= items[i].phoneNumber %> </h3>
-            
+            <h3>Contact Seller At  : <%= items[i].phoneNumber %> </h3>
+            <h3>College: <%= items[i].college%></h3>
             <form action="/customer/addtocart" method="POST">
               <button class="btn btn-success">Add to cart</button>
             </form>
