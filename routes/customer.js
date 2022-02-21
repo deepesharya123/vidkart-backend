@@ -11,8 +11,6 @@ const {sendEmail,resetPassEmail} = require('../email/email');
 
 // const mailgun = require("mailgun-js");
 
-
-
 const nodemailer = require('nodemailer')
 router.get('/register',async(req,res)=>{
     res.render('cregister')
