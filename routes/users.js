@@ -180,16 +180,17 @@ const upload = multer({
 
 router.post('/uploadItem',authseller,async(req,res)=>{
     //  title: 'asdf', description: 'asdfasdfasdf', price: '135468
-    
     try{
         upload(req,res,async(err)=>{
-            console.log(req.seller)
             const owner = req.seller.selleremail
             const phonenumber = req.seller.sellerphonenumber;
+            console.log("req.seller ",req.seller);
+            const college = req.seller.college;
+            console.log("req.body is ",req.body);
             let item = await Item.generateOwner(req.body,owner,req.file.filename,phonenumber);
 
-            console.log(item)
             const itemforSave = new Item(item);
+            console.log("item",item);
             await itemforSave.save()
 
             // res.redirect('/uploadItem')

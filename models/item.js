@@ -6,10 +6,15 @@ const itemSchema = new mongoose.Schema({
         type:String,
         required:true,
         lowercase:true
-    },description:{
+    },
+    college:{
         type:String,
         required:true,
-        minlength:50
+    },
+    description:{
+        type:String,
+        required:true,
+        minlength:5
     },
     price:{
         type:String,
@@ -37,25 +42,20 @@ itemSchema.statics.findItemByemail = async function(email){
 }
 
 itemSchema.statics.generateOwner = async function(para,owner,image,number){
-    // console.log(para)
 
-    const {title,description,price}  = para
-    const item = {title,
+    const {title,description,price,college}  = para;
+    const item = {
+        title,
         description,
         price,
-        owner:owner,
+        owner,
         imagePath:image,
         phoneNumber:number,
+        college,
     }
 
-    // console.log(item)
-
     return item
-
 }
-
-
-
 
 const Item = mongoose.model('Item',itemSchema)
 
