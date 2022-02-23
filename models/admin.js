@@ -58,7 +58,6 @@ adminSchema.pre('save',async function(next){
     if(admin.isModified('adminPassword')){
         admin.adminPassword = await bcrypt.hash(admin.adminPassword,8);
     }
-    console.log("from pre saving ",admin);
     next();
 })
 

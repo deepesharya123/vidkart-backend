@@ -184,9 +184,7 @@ router.post('/uploadItem',authseller,async(req,res)=>{
         upload(req,res,async(err)=>{
             const owner = req.seller.selleremail
             const phonenumber = req.seller.sellerphonenumber;
-            console.log("req.seller ",req.seller);
             const college = req.seller.college;
-            console.log("req.body is ",req.body);
             let item = await Item.generateOwner(req.body,owner,req.file.filename,phonenumber);
 
             const itemforSave = new Item(item);

@@ -81,7 +81,6 @@ router.post('/product',async(req,res)=>{
 
 router.post('/login',async(req,res)=>{
     try{
-        console.log("req.body from admin login",req.body);  
         const {adminEmail,adminPassword} = req.body;
         const admin = await Admin.findByCredentials(adminEmail,adminPassword);
 
@@ -92,7 +91,9 @@ router.post('/login',async(req,res)=>{
         const token = await admin.generateAuthtoken();
         res.cookie('auth_token',token);
         const {adminName} = admin;
-        res.render('admindashboard',{name:adminName,itemlen:0});
+        const items = await Item.find({});
+        console.log("items are",items);
+        res.render('admindashboard',{name:adminName,itemlen:0,items});
 
     }catch(e){
         console.log(e);
