@@ -40,46 +40,48 @@
        <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarSupportedContent" >
          <span class="navbar-toggler-icon"></span>
         </button>
-       <div class="collapse navbar-collapse class" id="navbarSupportedContent" >
-         <ul class="navbar-nav mr-auto">
-       
-           </ul>
-           
-        <form action="/admin/logout" method="POST">
-          <button class="btn btn-primary">Log out</button>
-      </form>
-
-         <form method="POST" action="/admin/loggedin/product" class="form-inline my-2 my-lg-0" >
-           <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="padding-left: 20px; color: white;">
-           <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+        <div class="collapse navbar-collapse class" id="navbarSupportedContent" >
+          <ul class="navbar-nav mr-auto">
+            
+          </ul>
+          
+          <form action="/admin/logout" method="POST">
+            <button class="btn btn-primary">Log out</button>
+          </form>
+          
+          <form method="POST" action="/admin/loggedin/product" class="form-inline my-2 my-lg-0" >
+            <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="padding-left: 20px; color: white;">
+              <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
             -->
             <input type="search" name="search" placeholder="Search" id="search" style="padding-left: 20px; color: black;">
             <button class="btn btn-success">Search</button>
-         </form>
-       </div></button>
- 
-     </nav>
-
-     <br><br>
-     <video autoplay muted  id="myVideo">
+          </form>
+        </div></button>
+        
+      </nav>
+      
+      <br><br>
+      <video autoplay muted  id="myVideo">
         <source src="/headerphoto/Sell2.mp4" type="video/mp4">
         Your browser does not support HTML5 video.
       </video>
-    
-    <center>
-
       
-    <div class="container">
-        <h1>Welcome <%=name%></h1>
-      <br>
-      <div >  
-</div>
-      <div class="" style="float: right;">
-     
-    
-      </div>
-        </div>
-    </center>
+    <div >
+      <center>
+        
+        
+        <div class="container">
+          <h1 >Welcome 
+            <span style="color: rgb(112, 44, 168);"><%=name%></span></h1>
+            <br>
+            <div >  
+            </div>
+            <div class="" style="float: right;">
+              
+              
+            </div>
+          </div>
+      </center>
  
 
     <% let itemlength = items.length; %>
@@ -88,6 +90,14 @@
         <center>   <h1>Sorry, we do not have this item now.</h1>
         </center>
         <%  }%> 
+    <center>
+            <%for(var j=0;j<Colleges.length;j++) {%>
+               <h1><%= j+1%>)<%= Colleges[j]%></h1>
+            <%}%>
+        <% if(Colleges.length===0) { %>
+          <h1>No College Associated till now.</h1>
+        <%}%>
+        </center>
         <% for(i=0;i<itemlength;i++) {%> 
               <br><br>
 <video autoplay muted  id="myVideo">
@@ -96,6 +106,7 @@
 </video> 
       <div class="container">
         <div class="row">
+          
           <div class="column-66">
             <h1 class="xlarge-font"><b><%= items[i].title  %> </b></h1>
             <h1 class="large-font" style="color:MediumSeaGreen;"><b> <h3>Price: <%= items[i].price %></h3></b> </h1>
@@ -103,29 +114,23 @@
             <h3>Contact number of seller : <%= items[i].phoneNumber %> </h3>
               <% let id =items[i]._id %> 
 
+              <% path = '/upload/'+items[i].imagePath %>
+                <img src="<%=path%>" width="20%" height="70%" style="float: right; padding-bottom: 30%;">
             <form action="/admin/loggedin/addtocart/<%=id%>"  method="POST">
               <button class="btn btn-success">Add to my cart </button>
             </form>
-          </div>
-          <div class="column-33">
-            <% path = '/upload/'+items[i].imagePath %>
-              <img src="<%=path%>" width="335" height="471" style="float: right;">
             
-            </div>
+          </div>
         </div>
-      </div>
-      
       <br>
 
 
     
-  </div>
 
       <% } %> 
 
 
-
-
+</div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
