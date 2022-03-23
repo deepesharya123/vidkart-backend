@@ -7,7 +7,7 @@ const multer = require('multer');
 const path = require('path');
 const jwt = require('jsonwebtoken')
 const {sendEmail,resetPassEmail} = require('../email/email')
-
+const College = require('../models/college');
 
 router.get('/register',async(req,res)=>{
     res.render("sellerregister");
@@ -182,13 +182,40 @@ router.post('/uploadItem',authseller,async(req,res)=>{
     //  title: 'asdf', description: 'asdfasdfasdf', price: '135468
     try{
         upload(req,res,async(err)=>{
-            const owner = req.seller.selleremail
+
+            // console.log("req.body for uploaditem",req.body)
+            // console.log("req.seller for uploaditem",req.seller)
+            
+            const owner = req.seller.selleremail;
             const phonenumber = req.seller.sellerphonenumber;
-            const college = req.seller.college;
+            const collegeOfItem = req.body.college;
+            console.log("College name",req.body.college)
             let item = await Item.generateOwner(req.body,owner,req.file.filename,phonenumber);
+            const CollegeExists = await College.find({});
+            console.log("CollegeExists",CollegeExists)
+            
+            let present = false;
+            const useCollege = {};
+            CollegeExists.forEach((college)=>{
+                if(college.collegeName===collegeOfItem){
+                    present=true;
+                    useCollege.collegeName=college.collegeName;
+                    useCollege.collegeCount=college.collegeCount;
+                }
+            })
+            if(!present){
+                const CollegeForSave = {};
+                CollegeForSave.collegeName = collegeOfItem;
+                CollegeForSave.collegeCount = 1;
+                const saveCollege = new College(CollegeForSave);
+                await saveCollege.save();
+            }
+            else
+                await College.updateOne({collegeName:collegeOfItem},{collegeCount:useCollege.collegeCount+1})
+            
+            const CollegeInfo =await College.find({});
 
             const itemforSave = new Item(item);
-            console.log("item",item);
             await itemforSave.save()
 
             // res.redirect('/uploadItem')
