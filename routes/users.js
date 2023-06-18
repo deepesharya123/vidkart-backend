@@ -82,7 +82,7 @@ router.post("/sverify", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  // console.log("req.body from backend", req.body);
+  console.log("req.body from login backend", req.body);
   try {
     const { selleremail, sellerpassword } = req.body;
 
@@ -95,19 +95,19 @@ router.post("/login", async (req, res) => {
     }
     const token = await seller.generateAuthtoken();
     console.log("token to be set", token);
-    res.cookie("auth_token", token, {
-      secure: true,
-      httpOnly: true,
-      maxAge: 1209600000,
-    });
+    // res.cookie("auth_token", token, {
+    //   secure: true,
+    //   httpOnly: true,
+    //   maxAge: 1209600000,
+    // });
     // res.send("Set the cookie");
     // console.log(" auth_token saved from login seller", req.cookies);
     // console.log("req from login seller", req);
     if (seller.sellerisVerified === true) {
-      res.status(200).json({ message: "Logged in Successfully" });
-      // res.render("dashboard", {
-      //   name: seller.sellername,
-      // });
+      // res.status(200).json({ message: "Logged in Successfully", token });
+      res.render("dashboard", {
+        name: seller.sellername,
+      });
     } else {
       res.status(400).json({ message: "Please verify your account" });
       // res.end("Please Verify your account before login");
@@ -119,7 +119,8 @@ router.post("/login", async (req, res) => {
 
 router.post("/logout", authseller, async (req, res) => {
   try {
-    console.log("From seller logout", req.body);
+    console.log("req.body From seller logout", req.body);
+    console.log({ "req.token": req.token, "req.seller": req.seller });
     req.seller.tokens = req.seller.tokens.filter(
       (token) => token.token != req.token
     );
