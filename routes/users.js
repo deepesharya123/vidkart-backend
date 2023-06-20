@@ -90,24 +90,30 @@ router.post("/login", async (req, res) => {
     // console.log("Seller from backend during login", seller);
     if (!seller) {
       res.status(404).json({ message: "Please verify your credentials" });
-      return;
+      // return;
       // res.send("<center><h1>The Email id is not registered.</h1></center>");
     }
     const token = await seller.generateAuthtoken();
     console.log("token to be set", token);
-    // res.cookie("auth_token", token, {
-    //   secure: true,
-    //   httpOnly: true,
-    //   maxAge: 1209600000,
-    // });
+
+    // setting cookie by backend(for backend only)
+    res.cookie("auth_token", token, {
+      secure: true,
+      // httpOnly: true,
+      maxAge: 1209600000,
+    });
     // res.send("Set the cookie");
     // console.log(" auth_token saved from login seller", req.cookies);
     // console.log("req from login seller", req);
     if (seller.sellerisVerified === true) {
-      // res.status(200).json({ message: "Logged in Successfully", token });
-      res.render("dashboard", {
-        name: seller.sellername,
+      res.status(200).json({
+        message:
+          "User have Logged in Successfully, search your product and buy them",
+        token,
       });
+      // res.render("dashboard", {
+      //   name: seller.sellername,
+      // });
     } else {
       res.status(400).json({ message: "Please verify your account" });
       // res.end("Please Verify your account before login");
@@ -118,6 +124,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/logout", authseller, async (req, res) => {
+  console.log("req.body from logout route", req.body);
   try {
     console.log("req.body From seller logout", req.body);
     console.log({ "req.token": req.token, "req.seller": req.seller });
