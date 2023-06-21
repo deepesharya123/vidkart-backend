@@ -14,6 +14,7 @@ router.get("/register", async (req, res) => {
 });
 
 router.get("/login", async (req, res) => {
+  console.log("asdf");
   res.render("sellerlogin");
 });
 
@@ -141,29 +142,39 @@ router.post("/logout", authseller, async (req, res) => {
 });
 
 router.post("/previousItem", authseller, async (req, res) => {
-  const sellermail = req.seller.selleremail;
-  console.log(sellermail);
+  console.log("Frm Previous items", req.body);
+  try {
+    const sellermail = req.seller.selleremail;
+    console.log(sellermail);
 
-  const items = await Item.findItemByemail(sellermail);
-  // items is a array of objects.
-  console.log("i am here");
-  console.log(items);
+    const items = await Item.findItemByemail(sellermail);
+    // items is a array of objects.
+    console.log("i am here");
+    console.log(items);
 
-  const itemLength = items.length;
-  console.log(itemLength);
-  res.render("sshowitem", {
-    name: req.seller.sellername,
-    items: items,
-    itemLength,
-  });
+    const itemLength = items.length;
+    console.log(itemLength);
+    res.status(200).send(items);
+    // res.render("sshowitem", {
+    //   name: req.seller.sellername,
+    //   items: items,
+    //   itemLength,
+    // });
+  } catch (e) {
+    console.log("Seom error occured while fetching  previous items", e);
+  }
 });
 
 router.get("/uploadItem", async (req, res) => {
+  console.log("1");
+
   res.render("additem");
   console.log("I am here");
 });
 
 router.post("/addnewItem", async (req, res) => {
+  console.log("2");
+
   // res.send("GOOD")
   res.render("additem");
 });
@@ -181,6 +192,7 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage: storage,
   fileFilter: function (req, file, cb) {
+    console.log("file from upload", file);
     if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
       return cb("Please check the content type");
     }
@@ -189,24 +201,25 @@ const upload = multer({
 }).single("ProductUpload", 10);
 
 router.post("/uploadItem", authseller, async (req, res) => {
-  //  title: 'asdf', description: 'asdfasdfasdf', price: '135468
   try {
     upload(req, res, async (err) => {
-      // console.log("req.body for uploaditem",req.body)
-      // console.log("req.seller for uploaditem",req.seller)
-
       const owner = req.seller.selleremail;
       const phonenumber = req.seller.sellerphonenumber;
       const collegeOfItem = req.body.college;
-      console.log("College name", req.body.college);
+
+      const url = req.body.ProductUpload;
+      console.log("req.body fromupload item ", req.body);
+      console.log("req.file", req.file);
+      // req.file.filename,
       let item = await Item.generateOwner(
         req.body,
         owner,
-        req.file.filename,
+        url,
+        // req.body.file.filename,
         phonenumber
       );
       const CollegeExists = await College.find({});
-      console.log("CollegeExists", CollegeExists);
+      // console.log("CollegeExists", CollegeExists);
 
       let present = false;
       const useCollege = {};
@@ -233,11 +246,16 @@ router.post("/uploadItem", authseller, async (req, res) => {
 
       const itemforSave = new Item(item);
       await itemforSave.save();
-
+      console.log("Item is Saved Enjoy!,, yout item is", itemforSave);
       // res.redirect('/uploadItem')
-      res.render("additem");
+      // res.render("additem");
+      res.status(200).json({ message: "Item succesfully uploaded!" });
     });
   } catch (e) {
+    res
+      .status(406)
+      .json({ message: "Item was not uploaded! Please try again." });
+
     console.log(e);
   }
 });

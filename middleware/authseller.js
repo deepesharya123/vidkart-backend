@@ -2,10 +2,11 @@ const Seller = require("../models/seller");
 const jwt = require("jsonwebtoken");
 
 const auth = async (req, res, next) => {
-  console.log("req.cookies  from authseller", req.cookies);
+  console.log("req.body from authseller ", req.body);
   try {
     // const token = req.cookies["auth_token"];
-    const token = req.cookies.auth_token;
+    // const token = req.cookies.auth_token;
+    const token = req.body.token;
     console.log("token again form authseller", {
       token,
     });
