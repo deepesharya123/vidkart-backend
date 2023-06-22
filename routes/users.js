@@ -150,7 +150,7 @@ router.post("/previousItem", authseller, async (req, res) => {
     const items = await Item.findItemByemail(sellermail);
     // items is a array of objects.
     console.log("i am here");
-    console.log(items);
+    // console.log(items);
 
     const itemLength = items.length;
     console.log(itemLength);
@@ -260,8 +260,8 @@ router.post("/uploadItem", authseller, async (req, res) => {
   }
 });
 
-router.post("/deletethisItem/:id", authseller, async (req, res) => {
-  console.log(req.params);
+router.post("/deletethisItem/", authseller, async (req, res) => {
+  console.log("req.body from delete route", req.body);
 
   // step1: i have load all the items
   // AND THEN increment the counter
@@ -270,41 +270,37 @@ router.post("/deletethisItem/:id", authseller, async (req, res) => {
   // and then delete that id
 
   try {
-    const selleremail = req.seller.selleremail;
-    console.log(selleremail);
-    // const items = await Item.findAllItemByEmail(selleremail);
-    const item = await Item.find();
-    console.log("item.length" + item.length);
-    let count = -1;
-    const reqId = req.params.id;
-    console.log(reqId);
-
-    let information = [];
-
-    for (i = 0; i < item.length; i++) {
-      const reqitem = item[i];
-      if (reqitem.owner === selleremail) {
-        information.push(reqitem);
-      }
-    }
-    console.log("information");
-    console.log(information);
-    console.log("good");
-
-    const reqitemforDeletion = information[req.params.id];
+    // const selleremail = req.seller.selleremail;
+    // console.log(selleremail);
+    // // const items = await Item.findAllItemByEmail(selleremail);
+    // const item = await Item.find();
+    // console.log("item.length" + item.length);
+    // let count = -1;
+    // const reqId = req.params.id;
+    // console.log(reqId);
+    // let information = [];
+    // for (i = 0; i < item.length; i++) {
+    //   const reqitem = item[i];
+    //   if (reqitem.owner === selleremail) {
+    //     information.push(reqitem);
+    //   }
+    // }
+    // console.log("information");
+    // console.log(information);
+    // console.log("good");
+    // const reqitemforDeletion = information[req.params.id];
+    const reqitemforDeletion = req.body.id;
     console.log(reqitemforDeletion);
-
-    const items = await Item.findByIdAndRemove(reqitemforDeletion._id);
-
+    const items = await Item.findByIdAndRemove(reqitemforDeletion);
     // console.log(item)
     const renderItem = await Item.find({ owner: req.seller.selleremail });
-
     console.log(renderItem);
-    res.render("sshowitem", {
-      name: req.seller.sellername,
-      items: renderItem,
-      itemLength: renderItem.length,
-    });
+    res.status(200).json({ message: "Item Delete Successfully" });
+    // res.render("sshowitem", {
+    //   name: req.seller.sellername,
+    //   items: renderItem,
+    //   itemLength: renderItem.length,
+    // });
   } catch (e) {
     console.log(e);
   }
