@@ -108,8 +108,7 @@ router.post("/login", async (req, res) => {
     // console.log("req from login seller", req);
     if (seller.sellerisVerified === true) {
       res.status(200).json({
-        message:
-          "User have Logged in Successfully, search your product and buy them",
+        message: "User have Logged in Successfully, you can start selling!",
         token,
       });
       // res.render("dashboard", {

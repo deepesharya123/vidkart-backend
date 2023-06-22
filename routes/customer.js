@@ -25,8 +25,8 @@ router.get("/product/:search", async (req, res) => {
     // const search = req.body.search;
     const { search } = req.params;
     const items = await Item.find({ title: search });
-    console.log("searched item is ", search);
-    console.log("items", items);
+    // console.log("searched item is ", search);
+    // console.log("items", items);
     res.send({ items });
   } catch (e) {
     console.log(e);
@@ -65,11 +65,11 @@ router.post("/register", async (req, res) => {
     const email = customeremail;
     sendEmail(email, name, url);
 
-    res.render("cverify");
+    res.status(200).json({ message: "Registered Successfully!" });
+    // res.render("cverify");
   } catch (e) {
     console.log(e);
-
-    res.send("Please check your creds");
+    res.status(409).json({ message: "User is already registered!" });
   }
 });
 
@@ -78,12 +78,16 @@ router.post("/cverify", async (req, res) => {
   //     cverifyToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcm5hbWUiOiJEZWVwZXNoIEFyeWEiLCJjdXN0b21lcmVtYWlsIjoiZGVlcGVzaGFyeWE4MjI0NkBnbWFpbC5jb20iLCJjdXN0b21lcnBhc3N3b3JkIjoiZGVlcGVzaGFyeWE4MjI0NkBnbWFpbC5jb20iLCJpYXQiOjE1OTYzNTY5MjMsImV4cCI6MTU5NjM1ODEyM30.pueUdloNaXgyNGkClLvAowYrhntFlBWNGAZqfYSStM0'
   //   }
   try {
+    console.log("From Cverify boduy", req.body);
     const ctoken = req.body.cverifyToken;
     const customer = await Customer.findOne({
-      customerTokenActivation: ctoken,
+      customerTokenActivation: req.body.token.customerTokenActivation,
     });
+    console.log("customer ", customer);
     if (!customer) {
-      res.send("You are not Authorized to perform this action");
+      res.status(401).json({ message: "Please enter correct token" });
+
+      // res.send("You are not Authorized to perform this action");
     }
     customer.customerisVerified = true;
     await customer.save();
@@ -103,31 +107,45 @@ router.post("/login", async (req, res) => {
       customerpassword
     );
     if (!customer) {
-      res.send(
-        "You are not registered, Please make sure that you are registered."
-      );
+      res.status(404).json({ message: "Please verify your credentials" });
+
+      // res.send(
+      //   "You are not registered, Please make sure that you are registered."
+      // );
     }
 
     const token = await customer.generateAuthtoken();
-
-    res.cookie("auth_token", token);
-
+    console.log("token to be set from customer", token);
+    // setting cookie by backend(for backend only)
+    res.cookie("auth_token", token, {
+      secure: true,
+      // httpOnly: true,
+      maxAge: 1209600000,
+    });
     const name = customer.customername;
     // console.log(customer)
 
     const itemlen = 0;
-
+    console.log("item", { len: itemlen, verifi: customer.customerisVerified });
     if (customer.customerisVerified === true) {
-      res.render("cdashboard", {
-        name,
-        itemlen,
+      res.status(200).json({
+        message:
+          "User have Logged in Successfully, search your product and buy them!",
+        token,
       });
+      // res.render("cdashboard", {
+      //   name,
+      //   itemlen,
+      // });
     } else {
-      res.send(
-        "<center><h1>Please verify your email before login</h1></center>"
-      );
+      res.status(400).json({ message: "Please verify your account" });
+      // res.send(
+      //   "<center><h1>Please verify your email before login</h1></center>"
+      // );
     }
-  } catch (e) {}
+  } catch (e) {
+    console.log("Login error ", e);
+  }
 });
 
 router.post("/logout", customerAuth, async (req, res) => {
@@ -176,9 +194,11 @@ router.post("/loggedin/product", customerAuth, async (req, res) => {
   }
 });
 
-router.post("/loggedin/addtocart/:id", customerAuth, async (req, res) => {
+// router.post("/loggedin/addtocart/:id", customerAuth, async (req, res) => {
+router.post("/loggedin/addtocart/", customerAuth, async (req, res) => {
+  console.log("loggediin addot cart ", req.body);
   try {
-    const reqItemId = req.params.id;
+    const reqItemId = req.body.id;
     console.log(reqItemId);
 
     const item = await Item.findById(reqItemId);
@@ -201,7 +221,8 @@ router.post("/loggedin/addtocart/:id", customerAuth, async (req, res) => {
       console.log(cartReady);
       console.log(":cartPart.save()Line 178");
     } else {
-      res.send("<center><h1>Item is already in your cart</h1></center>");
+      res.status(409).json({ message: "Item is already in your cart." });
+      // res.send("<center><h1>Item is already in your cart</h1></center>");
     }
   } catch (e) {
     console.log(e);
@@ -209,22 +230,22 @@ router.post("/loggedin/addtocart/:id", customerAuth, async (req, res) => {
 });
 
 router.post("/previousItem", customerAuth, async (req, res) => {
+  console.log("Frm previosuitem route", req.body);
   try {
     const items = await Cart.find({ cartOwner: req.customer.customeremail });
     console.log(items);
 
     const itemlen = items.length;
-    console.log(itemlen);
+    console.log("itemlen", itemlen);
 
     const realitem = [];
 
     for (i = 0; i < itemlen; i++) {
       const id = items[i].id;
-      console.log(id);
+      console.log("asfd", id);
 
       const myitem = await Item.findById(id);
-
-      realitem.push(myitem);
+      if (myitem) realitem.push(myitem);
     }
 
     if (realitem.length === 0) {
@@ -233,29 +254,31 @@ router.post("/previousItem", customerAuth, async (req, res) => {
 
     if (realitem.length > 0) {
       const name = req.customer.customername;
-      console.log(realitem);
-      res.render("ccartitem", {
-        name,
-        itemLength: realitem.length,
-        items: realitem,
-      });
+      console.log("realitem 212", realitem);
+      res.status(200).send(realitem);
+      // res.render("ccartitem", {
+      //   name,
+      //   itemLength: realitem.length,
+      //   items: realitem,
+      // });
     }
   } catch (e) {
     console.log(e);
   }
 });
 
-router.post("/deletethisItem/:id", customerAuth, async (req, res) => {
+// router.post("/deletethisItem/:id", customerAuth, async (req, res) => {
+router.post("/deletethisItem/", customerAuth, async (req, res) => {
   try {
     console.log("Cart item deletion start");
     // console.log(req.params.id)       // this is the id of item from items model
-    const delitemid = req.params.id;
+    const delitemid = req.body.id;
 
     const itemfordeletion = await Cart.find({
       id: delitemid,
       cartOwner: req.customer.customeremail,
     });
-    console.log(itemfordeletion);
+    // console.log(itemfordeletion);
     const idofitemfordeletion = itemfordeletion[0]._id;
     console.log(idofitemfordeletion);
     const itemdeleted = await Cart.findByIdAndRemove(idofitemfordeletion);
@@ -263,12 +286,13 @@ router.post("/deletethisItem/:id", customerAuth, async (req, res) => {
     const items = await Cart.find({ cartOwner: req.customer.customeremail });
 
     if (items.length === 0) {
-      res.send("<center><h1>There is no more item</h1></center>");
+      res.status(200).json({ message: "No more items to show!" });
+      // res.send("<center><h1>There is no more item</h1></center>");
     }
 
     if (items.length > 0) {
       const name = req.customer.customername;
-      console.log("BEFORE ITEMS");
+      // console.log("BEFORE ITEMS");
 
       const itemslen = items.length;
       const displayItem = [];
@@ -279,15 +303,21 @@ router.post("/deletethisItem/:id", customerAuth, async (req, res) => {
         console.log(theitem);
         displayItem.push(theitem);
       }
-      console.log("THE DISPLAYITM");
-      console.log(displayItem);
-      res.render("ccartitem", {
-        name,
-        itemLength: displayItem.length,
-        items: displayItem,
-      });
+      // console.log("THE DISPLAYITM");
+      // console.log(displayItem);
+      res.status(200).json({ message: "Item deleted Successfully!" });
+      // res.render("ccartitem", {
+      //   name,
+      //   itemLength: displayItem.length,
+      //   items: displayItem,
+      // });
     }
   } catch (e) {
+    res
+      .status(500)
+      .json({
+        message: "Some error occured while deleteing the item from cart.",
+      });
     console.log(e);
   }
 });

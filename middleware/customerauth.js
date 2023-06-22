@@ -2,8 +2,14 @@ const jwt = require("jsonwebtoken");
 const Customer = require("../models/customer");
 
 const customerAuth = async function (req, res, next) {
+  console.log("customer auth", req.body);
   try {
-    const token = req.cookies["auth_token"];
+    // const token = req.cookies["auth_token"];
+    const token = req.body.token;
+    console.log("token again form custoemr auth", {
+      token,
+    });
+
     const decoded = jwt.verify(token, process.env.JWT_ACC_KEY);
     const customer = await Customer.findOne({
       _id: decoded._id,
@@ -18,7 +24,6 @@ const customerAuth = async function (req, res, next) {
     req.customer = customer;
     // console.log(req.customer)
     req.token = token;
-    console.log();
     next();
   } catch (e) {
     console.log(e);
