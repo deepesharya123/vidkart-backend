@@ -313,11 +313,9 @@ router.post("/deletethisItem/", customerAuth, async (req, res) => {
       // });
     }
   } catch (e) {
-    res
-      .status(500)
-      .json({
-        message: "Some error occured while deleteing the item from cart.",
-      });
+    res.status(500).json({
+      message: "Some error occured while deleteing the item from cart.",
+    });
     console.log(e);
   }
 });

@@ -19,7 +19,7 @@ const adminSchema = new mongoose.Schema({
   },
   adminIsVerified: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   adminPhonenumber: {
     type: String,
