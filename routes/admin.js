@@ -84,6 +84,7 @@ router.post("/product", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
+    console.log("req.body from admin login", req.body);
     const { adminEmail, adminPassword } = req.body;
     const admin = await Admin.findByCredentials(adminEmail, adminPassword);
 
@@ -116,7 +117,8 @@ router.post("/login", async (req, res) => {
     // });
   } catch (e) {
     console.log(e);
-    res.send("<h1><center>Something went wrong.</center></h1>");
+    res.send(e);
+    // res.send("<h1><center>Something went wrong.</center></h1>");
   }
 });
 
