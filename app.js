@@ -12,6 +12,7 @@ app.use(
     credentials: true,
     // origin: "http://localhost:3000",
     origin: "https://vidkart.netlify.app",
+    optionSuccessStatus: 200,
   })
 );
 
