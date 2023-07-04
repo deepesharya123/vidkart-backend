@@ -89,7 +89,9 @@ router.post("/login", async (req, res) => {
     const admin = await Admin.findByCredentials(adminEmail, adminPassword);
     console.log("admin from login of admin", amdin);
     if (!admin || admin instanceof Error) {
-      res.render(admin);
+      res.status(404).json({ message: "Please verify your credentials" });
+
+      // res.render(admin);
     }
 
     const token = await admin.generateAuthtoken();
