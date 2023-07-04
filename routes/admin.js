@@ -87,7 +87,7 @@ router.post("/login", async (req, res) => {
     console.log("req.body from admin login", req.body);
     const { adminEmail, adminPassword } = req.body;
     const admin = await Admin.findByCredentials(adminEmail, adminPassword);
-
+    console.log("admin from login of admin", amdin);
     if (!admin || admin instanceof Error) {
       res.render(admin);
     }
