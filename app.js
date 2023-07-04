@@ -7,12 +7,13 @@ const cors = require("cors");
 
 require("dotenv").config("./dev.env");
 app.use(cors());
-// app.use(
-//   cors({
-//     credentials: true,
-//     origin: "http://localhost:3000",
-//   })
-// );
+app.use(
+  cors({
+    credentials: true,
+    // origin: "http://localhost:3000",
+    origin: "https://vidkart.netlify.app/",
+  })
+);
 
 const port = process.env.PORT;
 
