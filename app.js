@@ -11,7 +11,7 @@ app.use(
   cors({
     credentials: true,
     // origin: "http://localhost:3000",
-    origin: "https://vidkart.netlify.app/",
+    origin: "https://vidkart.netlify.app",
   })
 );
 
