@@ -98,11 +98,11 @@ router.post("/login", async (req, res) => {
     console.log("token to be set", token);
 
     // setting cookie by backend(for backend only)
-    res.cookie("auth_token", token, {
-      secure: true,
-      // httpOnly: true,
-      maxAge: 1209600000,
-    });
+    // res.cookie("auth_token", token, {
+    //   secure: true,
+    //   // httpOnly: true,
+    //   maxAge: 1209600000,
+    // });
     // res.send("Set the cookie");
     // console.log(" auth_token saved from login seller", req.cookies);
     // console.log("req from login seller", req);

@@ -92,7 +92,7 @@ router.post("/login", async (req, res) => {
     }
 
     const token = await admin.generateAuthtoken();
-    res.cookie("auth_token", token);
+    // res.cookie("auth_token", token);
     const { adminName } = admin;
     const items = await Item.find({});
     const AllCollege = await College.find({});
