@@ -119,7 +119,8 @@ router.post("/login", async (req, res) => {
     // });
   } catch (e) {
     console.log(e);
-    res.send(e);
+    res.status(400).json({ message: "Please verify your account" });
+
     // res.send("<h1><center>Something went wrong.</center></h1>");
   }
 });
