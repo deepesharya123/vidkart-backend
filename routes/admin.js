@@ -88,7 +88,7 @@ router.post("/login", async (req, res) => {
     const { adminEmail, adminPassword } = req.body;
     const admin = await Admin.findByCredentials(adminEmail, adminPassword);
 
-    if (!admin) {
+    if (!admin || admin instanceof Error) {
       res.render(admin);
     }
 
