@@ -17,7 +17,7 @@ const sellerSchema = new mongoose.Schema({
   sellerTokenActivation: {
     type: String,
   },
-  sellerisVerified: {
+  isSellerVerified: {
     type: Boolean,
     defaultValue: false,
   },

@@ -6,18 +6,16 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 require("dotenv").config("./dev.env");
-app.use(cors());
-app.use(
-  cors({
-    credentials: true,
-    // origin: "http://localhost:3000",
-    origin: "https://vidkart.netlify.app",
-    optionSuccessStatus: 200,
-  })
-);
+const corsOption = {
+  origin: "*",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+};
+app.use(cors(corsOption));
 
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", req.header("Origin"));
+  console.log("req is here");
+  res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Credentials", true);
   res.header(
     "Access-Control-Allow-Headers",

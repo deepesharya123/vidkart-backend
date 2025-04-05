@@ -14,11 +14,11 @@ const sendEmail = (email, name, url) => {
       sender,
       to: recievers,
       subject: "Thanks for joining",
-      textContent: `
-    Hello ${name},
-    For you better experience we are requesting you to please 
-    verify your account by inserting the following link on verifiaction page.       
-    <a><br>"${url}"</a>
+      htmlContent: `
+      <p>Hello ${name},</p>
+      <p>For a better experience, please verify your account by pasting the below token.</p>
+      <p><a href="${url}" target="_blank">${url}</a></p>
+      
     `,
     })
     .then((res) => console.log("response afer sending email", res))
