@@ -26,7 +26,7 @@ router.post("/register", async (req, res) => {
   try {
     console.log("Came to backend for register customer, req.body", req.body);
     const seller = new Seller(req.body);
-    seller.sellerisVerified = false;
+    seller.isSellerVerified = false;
     const sellername = seller.sellername;
     const selleremail = seller.selleremail;
     const sellerpassword = seller.sellerpassword;
@@ -71,7 +71,7 @@ router.post("/sverify", async (req, res) => {
       res.status(401).json({ message: "Please enter correct token" });
     }
     console.log("Seller is ", seller);
-    seller.sellerisVerified = true;
+    seller.isSellerVerified = true;
     console.log("Seller is ", seller);
     seller.save();
     console.log(seller);
@@ -106,7 +106,7 @@ router.post("/login", async (req, res) => {
     // res.send("Set the cookie");
     // console.log(" auth_token saved from login seller", req.cookies);
     // console.log("req from login seller", req);
-    if (seller.sellerisVerified === true) {
+    if (seller.isSellerVerified === true) {
       res.status(200).json({
         message: "User have Logged in Successfully, you can start selling!",
         token,
