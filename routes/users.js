@@ -110,6 +110,7 @@ router.post("/login", async (req, res) => {
       res.status(200).json({
         message: "User have Logged in Successfully, you can start selling!",
         token,
+        seller,
       });
       // res.render("dashboard", {
       //   name: seller.sellername,
