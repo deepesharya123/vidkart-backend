@@ -6,5 +6,5 @@ mongoose
     useNewUrlParser: true,
     useCreateIndex: true,
   })
-  .then(() => console.log("Connected to the DataBase on ", MONGO_URL))
+  .then(() => console.log("Connected to the DataBase on "))
   .catch((e) => console.log(e));
