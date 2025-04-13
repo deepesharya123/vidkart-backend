@@ -31,7 +31,7 @@ const itemSchema = new mongoose.Schema({
   },
 });
 
-itemSchema.statics.findItemByemail = async function (email) {
+itemSchema.statics.findAllItemsByEmail = async function (email) {
   const items = await Item.find({ owner: email });
   // console.log(items)
   if (!items) {

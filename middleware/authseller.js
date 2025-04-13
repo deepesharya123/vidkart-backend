@@ -19,7 +19,7 @@ const auth = async (req, res, next) => {
     });
 
     if (!seller) {
-      throw new Error("NO user found");
+      throw new Error({ message: "No user found" });
     }
 
     req.token = token;
@@ -27,6 +27,7 @@ const auth = async (req, res, next) => {
     next();
   } catch (e) {
     console.log("error form here seller auth", e);
+    res.send(e);
   }
 };
 
