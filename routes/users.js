@@ -88,7 +88,7 @@ router.post("/login", async (req, res) => {
     const { selleremail, sellerpassword } = req.body;
 
     const seller = await Seller.findByCredentials(selleremail, sellerpassword);
-    // console.log("Seller from backend during login", seller);
+    console.log("Seller from backend during login", seller);
     if (!seller) {
       res.status(404).json({ message: "Please verify your credentials" });
       // return;
@@ -97,27 +97,19 @@ router.post("/login", async (req, res) => {
     const token = await seller.generateAuthtoken();
     console.log("token to be set", token);
 
-    // setting cookie by backend(for backend only)
-    // res.cookie("auth_token", token, {
-    //   secure: true,
-    //   // httpOnly: true,
-    //   maxAge: 1209600000,
-    // });
-    // res.send("Set the cookie");
-    // console.log(" auth_token saved from login seller", req.cookies);
-    // console.log("req from login seller", req);
     if (seller.isSellerVerified === true) {
       res.status(200).json({
         message: "User have Logged in Successfully, you can start selling!",
         token,
-        seller,
+        seller: {
+          sellername: seller.sellername,
+          selleremail: seller.selleremail,
+          sellerphonenumber: seller.sellerphonenumber,
+          token,
+        },
       });
-      // res.render("dashboard", {
-      //   name: seller.sellername,
-      // });
     } else {
       res.status(400).json({ message: "Please verify your account" });
-      // res.end("Please Verify your account before login");
     }
   } catch (e) {
     console.log(e);
@@ -147,7 +139,7 @@ router.post("/previousItem", authseller, async (req, res) => {
     const sellermail = req.seller.selleremail;
     console.log(sellermail);
 
-    const items = await Item.findItemByemail(sellermail);
+    const items = await Item.findAllItemsByEmail(sellermail);
     // items is a array of objects.
     console.log("i am here");
     // console.log(items);
